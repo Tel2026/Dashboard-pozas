@@ -9,7 +9,7 @@ def index():
     with open('data.json') as f:
         data = json.load(f)
     pozas = list(data.keys())
-    return render_template('index.html', pozas=pozas)
+    return render_template('index.html', pozas=pozas, data=data)
 
 @app.route('/poza/<nombre>')
 def get_poza(nombre):
