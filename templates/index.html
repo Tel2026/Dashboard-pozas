@@ -3,32 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard de Pozas</title>
-  <script>
-    function cargarBombas() {
-      const poza = document.getElementById("pozaSelect").value;
-      fetch(`/poza/${poza}`)
-        .then(response => response.json())
-        .then(data => {
-          let html = "";
-          let total = 0;
-          data.forEach(bomba => {
-            html += `<p>${bomba.nombre}: ${bomba.flujo} L/s</p>`;
-            total += bomba.flujo;
-          });
-          html += `<hr><strong>Flujo total: ${total.toFixed(2)} L/s</strong>`;
-          document.getElementById("resultado").innerHTML = html;
-        });
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
     }
-  </script>
+    .container {
+      margin-top: 40px;
+    }
+    .table thead {
+      background-color: #003366;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Flujo por Poza</h2>
-  <label for="pozaSelect">Selecciona una poza:</label>
-  <select id="pozaSelect" onchange="cargarBombas()">
-    {% for poza in pozas %}
-      <option value="{{ poza }}">{{ poza }}</option>
-    {% endfor %}
-  </select>
-  <div id="resultado" style="margin-top: 20px;"></div>
+
+<div class="container">
+  <h2 class="text-center mb-4">Dashboard de Pozas y Bombas</h2>
+  
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ESTRUCTURA</th>
+          <th>BOMBA</th>
+          <th>L/S</th>
+          <th>M³/H</th>
+          <th class="hidden">FECHA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for poza in pozas %}
+          {% for bomba in data[poza] %}
+            <tr>
+              <td>{{ poza }}</td>
+              <td>{{ bomba["BOMBA"] }}</td>
+              <td>{{ bomba["L/S"] or '' }}</td>
+              <td>{{ bomba["M3/H"] or '' }}</td>
+              <td class="hidden">{{ bomba["FECHA"] or '' }}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 </body>
 </html>
