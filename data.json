@@ -1,0 +1,14 @@
+{
+    "Poza 1": [
+      {"nombre": "Bomba 1", "flujo": 12.3},
+      {"nombre": "Bomba 2", "flujo": 10.7}
+    ],
+    "Poza 2": [
+      {"nombre": "Bomba 1", "flujo": 15.4},
+      {"nombre": "Bomba 2", "flujo": 14.1},
+      {"nombre": "Bomba 3", "flujo": 13.2}
+    ],
+    "Poza 3": [
+      {"nombre": "Bomba 1", "flujo": 9.8}
+    ]
+  }

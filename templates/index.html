@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard de Pozas</title>
+  <script>
+    function cargarBombas() {
+      const poza = document.getElementById("pozaSelect").value;
+      fetch(`/poza/${poza}`)
+        .then(response => response.json())
+        .then(data => {
+          let html = "";
+          let total = 0;
+          data.forEach(bomba => {
+            html += `<p>${bomba.nombre}: ${bomba.flujo} L/s</p>`;
+            total += bomba.flujo;
+          });
+          html += `<hr><strong>Flujo total: ${total.toFixed(2)} L/s</strong>`;
+          document.getElementById("resultado").innerHTML = html;
+        });
+    }
+  </script>
+</head>
+<body>
+  <h2>Flujo por Poza</h2>
+  <label for="pozaSelect">Selecciona una poza:</label>
+  <select id="pozaSelect" onchange="cargarBombas()">
+    {% for poza in pozas %}
+      <option value="{{ poza }}">{{ poza }}</option>
+    {% endfor %}
+  </select>
+  <div id="resultado" style="margin-top: 20px;"></div>
+</body>
+</html>
