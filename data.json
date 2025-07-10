@@ -302,14 +302,20 @@
   "ALMACENAMIENTO NORTE": [
     {
       "BOMBA": "POS 1",
-      "L/S": NaN,
-      "M3/H": NaN,
+      "L/S": 74,
+      "M3/H": 266,
       "FECHA": null
     },
     {
       "BOMBA": "POS 2",
-      "L/S": NaN,
-      "M3/H": NaN,
+      "L/S": 87,
+      "M3/H": 313,
+      "FECHA": null
+    },
+    {
+      "BOMBA": "POS 1 y 2",
+      "L/S": 110,
+      "M3/H": 396,
       "FECHA": null
     }
   ],
