@@ -9,7 +9,7 @@ def index():
     with open('data.json') as f:
         data = json.load(f)
     pozas = list(data.keys())
-    return render_template('index.html', pozas=pozas, data=data)
+    return render_template('index.html', pozas=pozas)
 
 @app.route('/poza/<nombre>')
 def get_poza(nombre):
@@ -18,6 +18,5 @@ def get_poza(nombre):
     bombas = data.get(nombre, [])
     return jsonify(bombas)
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port, debug=True)
