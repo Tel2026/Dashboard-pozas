@@ -1,51 +1,95 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Monitoreo de Pozas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard de Pozas</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    select { padding: 8px; font-size: 16px; }
-    .info { margin-top: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select {
+      padding: 0.5rem;
+      width: 100%;
+      font-size: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #007BFF;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <h2>Seleccione una poza:</h2>
-
-  <select id="pozaSelect">
-    <option value="">-- Elegir --</option>
-    {% for poza in pozas %}
+  <div class="container">
+    <h2>Monitoreo de Pozas</h2>
+    <label for="pozaSelect">Selecciona una poza:</label>
+    <select id="pozaSelect">
+      <option value="">-- Selecciona --</option>
+      {% for poza in pozas %}
       <option value="{{ poza }}">{{ poza }}</option>
-    {% endfor %}
-  </select>
+      {% endfor %}
+    </select>
 
-  <div class="info" id="info"></div>
+    <table id="bombasTable" class="hidden">
+      <thead>
+        <tr>
+          <th>BOMBA</th>
+          <th>L/S</th>
+          <th>M3/H</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
   <script>
-    document.getElementById("pozaSelect").addEventListener("change", function() {
+    document.getElementById('pozaSelect').addEventListener('change', async function () {
       const poza = this.value;
-      const infoDiv = document.getElementById("info");
-      infoDiv.innerHTML = "";
-
-      if (poza) {
-        fetch(`/poza/${encodeURIComponent(poza)}`)
-          .then(response => response.json())
-          .then(bombas => {
-            if (bombas.length > 0) {
-              let table = "<table><tr><th>Bomba</th><th>L/s</th><th>m³/h</th></tr>";
-              bombas.forEach(b => {
-                table += `<tr><td>${b.BOMBA}</td><td>${b.LPS || ""}</td><td>${b.M3H || ""}</td></tr>`;
-              });
-              table += "</table>";
-              infoDiv.innerHTML = table;
-            } else {
-              infoDiv.innerHTML = "<p>No hay datos disponibles para esta poza.</p>";
-            }
-          });
+      const table = document.getElementById('bombasTable');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
+      if (!poza) {
+        table.classList.add('hidden');
+        return;
       }
+
+      const response = await fetch(`/poza/${encodeURIComponent(poza)}`);
+      const data = await response.json();
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item['BOMBA'] ?? ''}</td>
+          <td>${item['L/S'] ?? ''}</td>
+          <td>${item['M3/H'] ?? ''}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      table.classList.remove('hidden');
     });
   </script>
 </body>
